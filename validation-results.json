@@ -1,0 +1,1793 @@
+{
+  "validations": [
+    {
+      "name": "get_deposit_rules",
+      "description": "Get security deposit rules for a US state. Filter by state code and optional city for local overrides. Returns: { state, city_override, max_deposit, return_deadline_days, itemized_deductions_required, interest_required, statute_reference, rule_summary, full_details, last_updated }",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "type": "string",
+            "default": "CA",
+            "description": "US state code e.g. 'CA', 'TX', 'NY', 'FL', 'IL'. Default: CA"
+          },
+          "city": {
+            "type": "string",
+            "description": "City name for local overrides e.g. 'Los Angeles', 'Chicago', 'New York City'"
+          },
+          "compare_states": {
+            "type": "boolean",
+            "default": false,
+            "description": "If true, return deposit rules for all 5 covered states for comparison"
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "comparison_mode": {
+            "type": "boolean"
+          },
+          "states": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "type": "string"
+                },
+                "max_deposit": {
+                  "type": "string"
+                },
+                "return_deadline_days": {
+                  "type": "number"
+                },
+                "itemized_deductions_required": {
+                  "type": "boolean"
+                },
+                "interest_required": {
+                  "type": "boolean"
+                },
+                "statute_reference": {
+                  "type": "string"
+                },
+                "rule_summary": {
+                  "type": "string"
+                },
+                "error": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "state"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "state": {
+            "type": "string"
+          },
+          "city_override": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "max_deposit": {
+            "type": "string"
+          },
+          "furnished_limit": {
+            "type": "string"
+          },
+          "unfurnished_limit": {
+            "type": "string"
+          },
+          "return_deadline_days": {
+            "type": "number"
+          },
+          "itemized_deductions_required": {
+            "type": "boolean"
+          },
+          "allowed_deductions": {
+            "type": "string"
+          },
+          "interest_required": {
+            "type": "boolean"
+          },
+          "interest_details": {
+            "type": "string"
+          },
+          "penalty_for_late_return": {
+            "type": "string"
+          },
+          "statute_reference": {
+            "type": "string"
+          },
+          "rule_summary": {
+            "type": "string"
+          },
+          "full_details": {
+            "type": "object",
+            "additionalProperties": {
+              "type": [
+                "string",
+                "number",
+                "boolean"
+              ]
+            }
+          },
+          "effective_date": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "string",
+            "enum": [
+              "statute",
+              "regulation",
+              "case_law"
+            ]
+          },
+          "notes": {
+            "type": "string"
+          },
+          "last_updated": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          },
+          "supported_states": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "_meta": {
+        "surface": "both",
+        "queryEligible": true,
+        "latencyClass": "instant",
+        "pricing": {
+          "executeUsd": "0.001"
+        },
+        "rateLimit": {
+          "maxRequestsPerMinute": 120,
+          "maxConcurrency": 10,
+          "cooldownMs": 500,
+          "notes": "Reads from local pre-built legal database. No external API calls."
+        }
+      },
+      "schemaOk": true,
+      "schemaIssues": [],
+      "smokeTestResult": {
+        "pass": true,
+        "responseTime": 27,
+        "responseContent": {
+          "state": "CA",
+          "city_override": null,
+          "max_deposit": "1 month's rent",
+          "furnished_limit": "1 month's rent",
+          "unfurnished_limit": "1 month's rent",
+          "return_deadline_days": 21,
+          "itemized_deductions_required": true,
+          "allowed_deductions": "Unpaid rent, cleaning beyond normal wear and tear, repairs for tenant damage",
+          "interest_required": false,
+          "interest_details": "No statutory requirement to pay interest on deposits",
+          "penalty_for_late_return": "Bad faith retention may result in up to 2x the deposit amount in statutory damages plus actual damages",
+          "statute_reference": "Cal. Civ. Code § 1950.5",
+          "rule_summary": "California limits security deposits to 1 month's rent for all residential units (changed from 2 months for furnished in 2024). Must return within 21 days with itemized statement.",
+          "full_details": {
+            "max_deposit_amount": "1 month's rent",
+            "furnished_limit": "1 month's rent",
+            "unfurnished_limit": "1 month's rent",
+            "return_deadline_days": 21,
+            "itemized_deductions_required": true,
+            "allowed_deductions": "Unpaid rent, cleaning beyond normal wear and tear, repairs for tenant damage",
+            "interest_required": false,
+            "interest_details": "No statutory requirement to pay interest on deposits",
+            "penalty_for_late_return": "Bad faith retention may result in up to 2x the deposit amount in statutory damages plus actual damages",
+            "special_rules": "AB 12 (2024) changed limit from 2 months (furnished) to 1 month for all. Applies to leases signed on/after July 1, 2024."
+          },
+          "effective_date": "2024-07-01",
+          "confidence": "statute",
+          "notes": "AB 12 significantly changed deposit limits in 2024. Prior law allowed 2 months for furnished, 3 months for furnished waterbed units.",
+          "last_updated": "2026-03-22T12:19:34.723Z"
+        }
+      }
+    },
+    {
+      "name": "get_eviction_timeline",
+      "description": "Get eviction notice periods and procedures for a US state. Returns: { state, nonpayment_notice_days, cure_period_allowed, just_cause_required, estimated_court_timeline, statute_reference, rule_summary, full_details, last_updated }",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "type": "string",
+            "default": "CA",
+            "description": "US state code e.g. 'CA', 'TX', 'NY', 'FL', 'IL'. Default: CA"
+          },
+          "city": {
+            "type": "string",
+            "description": "City name for local overrides e.g. 'Los Angeles', 'Chicago', 'New York City'"
+          },
+          "compare_states": {
+            "type": "boolean",
+            "default": false,
+            "description": "If true, return eviction timeline rules for all 5 covered states for comparison"
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "comparison_mode": {
+            "type": "boolean"
+          },
+          "states": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "type": "string"
+                },
+                "nonpayment_notice_days": {
+                  "type": "number"
+                },
+                "nonpayment_notice_type": {
+                  "type": "string"
+                },
+                "cure_period_allowed": {
+                  "type": "boolean"
+                },
+                "just_cause_required": {
+                  "type": "boolean"
+                },
+                "estimated_court_timeline_days": {
+                  "type": "string"
+                },
+                "statute_reference": {
+                  "type": "string"
+                },
+                "rule_summary": {
+                  "type": "string"
+                },
+                "error": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "state"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "state": {
+            "type": "string"
+          },
+          "city_override": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "nonpayment_notice_days": {
+            "type": "number"
+          },
+          "nonpayment_notice_type": {
+            "type": "string"
+          },
+          "cure_period_allowed": {
+            "type": "boolean"
+          },
+          "lease_violation_notice_days": {
+            "type": "number"
+          },
+          "lease_violation_cure_days": {
+            "type": "number"
+          },
+          "month_to_month_termination_days": {
+            "type": "number"
+          },
+          "unconditional_quit_available": {
+            "type": "boolean"
+          },
+          "unconditional_quit_conditions": {
+            "type": "string"
+          },
+          "just_cause_required": {
+            "type": "boolean"
+          },
+          "just_cause_details": {
+            "type": "string"
+          },
+          "court_filing_required": {
+            "type": "boolean"
+          },
+          "estimated_court_timeline_days": {
+            "type": "string"
+          },
+          "tenant_right_to_cure": {
+            "type": "boolean"
+          },
+          "illegal_eviction_penalties": {
+            "type": "string"
+          },
+          "special_protections": {
+            "type": "string"
+          },
+          "statute_reference": {
+            "type": "string"
+          },
+          "rule_summary": {
+            "type": "string"
+          },
+          "full_details": {
+            "type": "object",
+            "additionalProperties": {
+              "type": [
+                "string",
+                "number",
+                "boolean"
+              ]
+            }
+          },
+          "effective_date": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "string",
+            "enum": [
+              "statute",
+              "regulation",
+              "case_law"
+            ]
+          },
+          "notes": {
+            "type": "string"
+          },
+          "last_updated": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          },
+          "supported_states": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "_meta": {
+        "surface": "both",
+        "queryEligible": true,
+        "latencyClass": "instant",
+        "pricing": {
+          "executeUsd": "0.001"
+        },
+        "rateLimit": {
+          "maxRequestsPerMinute": 120,
+          "maxConcurrency": 10,
+          "cooldownMs": 500,
+          "notes": "Reads from local pre-built legal database. No external API calls."
+        }
+      },
+      "schemaOk": true,
+      "schemaIssues": [],
+      "smokeTestResult": {
+        "pass": true,
+        "responseTime": 24,
+        "responseContent": {
+          "state": "CA",
+          "city_override": null,
+          "nonpayment_notice_days": 3,
+          "nonpayment_notice_type": "3-Day Notice to Pay or Quit",
+          "cure_period_allowed": true,
+          "lease_violation_notice_days": 3,
+          "lease_violation_cure_days": 3,
+          "month_to_month_termination_days": 30,
+          "unconditional_quit_available": true,
+          "unconditional_quit_conditions": "Unconditional quit (no cure) allowed for: subleasing without permission, substantial damage to property, illegal activity, repeat violations within 12 months",
+          "just_cause_required": true,
+          "just_cause_details": "AB 1482 requires just cause for properties >15 years old with no exemptions. At-fault causes: nonpayment, lease violation, nuisance, illegal activity. No-fault causes: owner move-in, substantial renovation, Ellis Act withdrawal. No-fault evictions require 1 month rent relocation assistance.",
+          "court_filing_required": true,
+          "estimated_court_timeline_days": "30-90 days (varies by county; LA/SF often longer)",
+          "tenant_right_to_cure": true,
+          "illegal_eviction_penalties": "Self-help evictions (lockouts, utility shutoffs) are illegal. Tenant may sue for actual damages, punitive damages up to $100/day of violation, attorney's fees. Minimum statutory damages often apply.",
+          "special_protections": "COVID-era protections have expired but eviction moratoria may exist in some cities. Rent control cities (LA, SF, Oakland, etc.) have additional just cause requirements predating AB 1482.",
+          "statute_reference": "Cal. Civ. Code §§ 1946.2 (AB 1482), CCP §§ 1161-1179a",
+          "rule_summary": "California requires 3-day notice for nonpayment, just cause eviction required statewide under AB 1482 (Tenant Protection Act). No-fault evictions require relocation assistance.",
+          "full_details": {
+            "nonpayment_notice_days": 3,
+            "nonpayment_notice_type": "3-Day Notice to Pay or Quit",
+            "cure_period_allowed": true,
+            "lease_violation_notice_days": 3,
+            "lease_violation_cure_days": 3,
+            "month_to_month_termination_days": 30,
+            "unconditional_quit_available": true,
+            "unconditional_quit_conditions": "Unconditional quit (no cure) allowed for: subleasing without permission, substantial damage to property, illegal activity, repeat violations within 12 months",
+            "just_cause_required": true,
+            "just_cause_details": "AB 1482 requires just cause for properties >15 years old with no exemptions. At-fault causes: nonpayment, lease violation, nuisance, illegal activity. No-fault causes: owner move-in, substantial renovation, Ellis Act withdrawal. No-fault evictions require 1 month rent relocation assistance.",
+            "court_filing_required": true,
+            "estimated_court_timeline_days": "30-90 days (varies by county; LA/SF often longer)",
+            "tenant_right_to_cure": true,
+            "illegal_eviction_penalties": "Self-help evictions (lockouts, utility shutoffs) are illegal. Tenant may sue for actual damages, punitive damages up to $100/day of violation, attorney's fees. Minimum statutory damages often apply.",
+            "special_protections": "COVID-era protections have expired but eviction moratoria may exist in some cities. Rent control cities (LA, SF, Oakland, etc.) have additional just cause requirements predating AB 1482."
+          },
+          "effective_date": "2020-01-01",
+          "confidence": "statute",
+          "notes": "AB 1482 (2019) applies statewide except exempt properties: built <15 years, single-family homes owned by individuals/LLCs with <3 properties, condos. Local ordinances may be stricter.",
+          "last_updated": "2026-03-22T12:19:34.723Z"
+        }
+      }
+    },
+    {
+      "name": "get_entry_requirements",
+      "description": "Get landlord entry notification requirements for a US state. Returns: { state, notice_required, notice_hours, permitted_reasons, emergency_entry_allowed, statute_reference, rule_summary, full_details, last_updated }",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "type": "string",
+            "default": "CA",
+            "description": "US state code e.g. 'CA', 'TX', 'NY', 'FL', 'IL'. Default: CA"
+          },
+          "city": {
+            "type": "string",
+            "description": "City name for local overrides e.g. 'Los Angeles', 'Chicago', 'New York City'"
+          },
+          "compare_states": {
+            "type": "boolean",
+            "default": false,
+            "description": "If true, return entry requirement rules for all 5 covered states for comparison"
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "comparison_mode": {
+            "type": "boolean"
+          },
+          "states": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "type": "string"
+                },
+                "notice_required": {
+                  "type": "boolean"
+                },
+                "notice_hours": {
+                  "type": "number"
+                },
+                "notice_must_be_written": {
+                  "type": "boolean"
+                },
+                "emergency_entry_allowed": {
+                  "type": "boolean"
+                },
+                "entry_hours_restriction": {
+                  "type": "string"
+                },
+                "statute_reference": {
+                  "type": "string"
+                },
+                "rule_summary": {
+                  "type": "string"
+                },
+                "error": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "state"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "state": {
+            "type": "string"
+          },
+          "city_override": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "notice_required": {
+            "type": "boolean"
+          },
+          "notice_hours": {
+            "type": "number"
+          },
+          "notice_must_be_written": {
+            "type": "boolean"
+          },
+          "permitted_entry_reasons": {
+            "type": "string"
+          },
+          "emergency_entry_allowed": {
+            "type": "boolean"
+          },
+          "entry_hours_restriction": {
+            "type": "string"
+          },
+          "tenant_can_deny_entry": {
+            "type": "boolean"
+          },
+          "penalty_for_illegal_entry": {
+            "type": "string"
+          },
+          "key_change_rules": {
+            "type": "string"
+          },
+          "showing_to_prospective_tenants": {
+            "type": "string"
+          },
+          "statute_reference": {
+            "type": "string"
+          },
+          "rule_summary": {
+            "type": "string"
+          },
+          "full_details": {
+            "type": "object",
+            "additionalProperties": {
+              "type": [
+                "string",
+                "number",
+                "boolean"
+              ]
+            }
+          },
+          "effective_date": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "string",
+            "enum": [
+              "statute",
+              "regulation",
+              "case_law"
+            ]
+          },
+          "notes": {
+            "type": "string"
+          },
+          "last_updated": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          },
+          "supported_states": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "_meta": {
+        "surface": "both",
+        "queryEligible": true,
+        "latencyClass": "instant",
+        "pricing": {
+          "executeUsd": "0.001"
+        },
+        "rateLimit": {
+          "maxRequestsPerMinute": 120,
+          "maxConcurrency": 10,
+          "cooldownMs": 500,
+          "notes": "Reads from local pre-built legal database. No external API calls."
+        }
+      },
+      "schemaOk": true,
+      "schemaIssues": [],
+      "smokeTestResult": {
+        "pass": true,
+        "responseTime": 22,
+        "responseContent": {
+          "state": "CA",
+          "city_override": null,
+          "notice_required": true,
+          "notice_hours": 24,
+          "notice_must_be_written": true,
+          "permitted_entry_reasons": "Make necessary or agreed repairs/improvements/services, show unit to prospective tenants/buyers/lenders/contractors, inspect pursuant to lease, court order, when tenant has abandoned or surrendered premises",
+          "emergency_entry_allowed": true,
+          "entry_hours_restriction": "Normal business hours (generally 8am-5pm on business days). Written notice must state date, approximate time, and purpose.",
+          "tenant_can_deny_entry": false,
+          "penalty_for_illegal_entry": "Tenant may sue for damages (actual + possible punitive). Repeated violations may constitute grounds for constructive eviction or lease termination by tenant. Invasion of privacy tort possible.",
+          "key_change_rules": "Landlord may not change locks without tenant's permission unless court order obtained. Tenant may change locks if landlord refuses to repair security issues (must provide key).",
+          "showing_to_prospective_tenants": "24-hour written notice required. Landlord may show unit during final 120 days of tenancy if proper notice given. Tenant must cooperate with reasonable showing requests.",
+          "statute_reference": "Cal. Civ. Code § 1954",
+          "rule_summary": "California requires 24-hour written notice for non-emergency entry during reasonable hours (8am-5pm normal business days). Entry permitted only for specific lawful purposes.",
+          "full_details": {
+            "notice_required": true,
+            "notice_hours": 24,
+            "notice_must_be_written": true,
+            "permitted_entry_reasons": "Make necessary or agreed repairs/improvements/services, show unit to prospective tenants/buyers/lenders/contractors, inspect pursuant to lease, court order, when tenant has abandoned or surrendered premises",
+            "emergency_entry_allowed": true,
+            "entry_hours_restriction": "Normal business hours (generally 8am-5pm on business days). Written notice must state date, approximate time, and purpose.",
+            "tenant_can_deny_entry": false,
+            "penalty_for_illegal_entry": "Tenant may sue for damages (actual + possible punitive). Repeated violations may constitute grounds for constructive eviction or lease termination by tenant. Invasion of privacy tort possible.",
+            "key_change_rules": "Landlord may not change locks without tenant's permission unless court order obtained. Tenant may change locks if landlord refuses to repair security issues (must provide key).",
+            "showing_to_prospective_tenants": "24-hour written notice required. Landlord may show unit during final 120 days of tenancy if proper notice given. Tenant must cooperate with reasonable showing requests."
+          },
+          "effective_date": "1986-01-01",
+          "confidence": "statute",
+          "notes": "Tenant cannot unreasonably withhold consent if proper notice given. Emergency entry (no notice) allowed for fire, flood, gas leak, etc. Oral notice acceptable if tenant agrees. Some local ordinances may be stricter.",
+          "last_updated": "2026-03-22T12:19:34.723Z"
+        }
+      }
+    },
+    {
+      "name": "get_late_fee_rules",
+      "description": "Get late fee and grace period rules for a US state. Returns: { state, late_fee_cap, grace_period_days, grace_period_required, must_be_in_lease, statute_reference, rule_summary, full_details, last_updated }",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "type": "string",
+            "default": "CA",
+            "description": "US state code e.g. 'CA', 'TX', 'NY', 'FL', 'IL'. Default: CA"
+          },
+          "city": {
+            "type": "string",
+            "description": "City name for local overrides e.g. 'Los Angeles', 'Chicago', 'New York City'"
+          },
+          "compare_states": {
+            "type": "boolean",
+            "default": false,
+            "description": "If true, return late fee rules for all 5 covered states for comparison"
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "comparison_mode": {
+            "type": "boolean"
+          },
+          "states": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "type": "string"
+                },
+                "late_fee_cap": {
+                  "type": "string"
+                },
+                "grace_period_days": {
+                  "type": "number"
+                },
+                "grace_period_required_by_law": {
+                  "type": "boolean"
+                },
+                "must_be_in_lease": {
+                  "type": "boolean"
+                },
+                "statute_reference": {
+                  "type": "string"
+                },
+                "rule_summary": {
+                  "type": "string"
+                },
+                "error": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "state"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "state": {
+            "type": "string"
+          },
+          "city_override": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "late_fee_cap": {
+            "type": "string"
+          },
+          "grace_period_days": {
+            "type": "number"
+          },
+          "grace_period_required_by_law": {
+            "type": "boolean"
+          },
+          "must_be_in_lease": {
+            "type": "boolean"
+          },
+          "reasonableness_standard": {
+            "type": "string"
+          },
+          "nsf_check_fee_limit": {
+            "type": "string"
+          },
+          "late_fee_on_late_fee_allowed": {
+            "type": "boolean"
+          },
+          "special_rules": {
+            "type": "string"
+          },
+          "statute_reference": {
+            "type": "string"
+          },
+          "rule_summary": {
+            "type": "string"
+          },
+          "full_details": {
+            "type": "object",
+            "additionalProperties": {
+              "type": [
+                "string",
+                "number",
+                "boolean"
+              ]
+            }
+          },
+          "effective_date": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "string",
+            "enum": [
+              "statute",
+              "regulation",
+              "case_law"
+            ]
+          },
+          "notes": {
+            "type": "string"
+          },
+          "last_updated": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          },
+          "supported_states": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "_meta": {
+        "surface": "both",
+        "queryEligible": true,
+        "latencyClass": "instant",
+        "pricing": {
+          "executeUsd": "0.001"
+        },
+        "rateLimit": {
+          "maxRequestsPerMinute": 120,
+          "maxConcurrency": 10,
+          "cooldownMs": 500,
+          "notes": "Reads from local pre-built legal database. No external API calls."
+        }
+      },
+      "schemaOk": true,
+      "schemaIssues": [],
+      "smokeTestResult": {
+        "pass": true,
+        "responseTime": 16,
+        "responseContent": {
+          "state": "CA",
+          "city_override": null,
+          "late_fee_cap": "No statutory cap, but must be reasonable. Courts typically uphold 5-6% of monthly rent. Flat fees around $50-100 for average rent also acceptable if reasonable.",
+          "grace_period_days": 0,
+          "grace_period_required_by_law": false,
+          "must_be_in_lease": true,
+          "reasonableness_standard": "Late fees are liquidated damages and must represent reasonable estimate of landlord's actual damages from late payment. Cannot be penalty. Courts scrutinize amounts over 10% of rent. Must be proportional to rent amount.",
+          "nsf_check_fee_limit": "Up to $25 for first bad check, $35 for subsequent (per Cal. Civ. Code § 1719). Plus bank fees actually incurred.",
+          "late_fee_on_late_fee_allowed": false,
+          "special_rules": "Daily late fees are disfavored (courts prefer one-time fees). Grace period not required but common (3-5 days typical). Rent control cities may have stricter limits. Fee cannot accrue during COVID-era protected periods if still applicable.",
+          "statute_reference": "Cal. Civ. Code § 1671 (liquidated damages); Orozco v. Casimiro (2004) 121 Cal.App.4th Supp. 7",
+          "rule_summary": "California has no statutory cap on late fees but courts enforce strict reasonableness standard. Fees must be liquidated damages (reasonable estimate of landlord's actual damages), not penalties. Typically 5-6% of monthly rent upheld.",
+          "full_details": {
+            "late_fee_cap": "No statutory cap, but must be reasonable. Courts typically uphold 5-6% of monthly rent. Flat fees around $50-100 for average rent also acceptable if reasonable.",
+            "grace_period_days": 0,
+            "grace_period_required_by_law": false,
+            "must_be_in_lease": true,
+            "reasonableness_standard": "Late fees are liquidated damages and must represent reasonable estimate of landlord's actual damages from late payment. Cannot be penalty. Courts scrutinize amounts over 10% of rent. Must be proportional to rent amount.",
+            "nsf_check_fee_limit": "Up to $25 for first bad check, $35 for subsequent (per Cal. Civ. Code § 1719). Plus bank fees actually incurred.",
+            "late_fee_on_late_fee_allowed": false,
+            "special_rules": "Daily late fees are disfavored (courts prefer one-time fees). Grace period not required but common (3-5 days typical). Rent control cities may have stricter limits. Fee cannot accrue during COVID-era protected periods if still applicable."
+          },
+          "effective_date": "2004-01-01",
+          "confidence": "case_law",
+          "notes": "California courts strictly scrutinize late fees as liquidated damages clause. Burden on landlord to prove reasonableness if challenged. 5-6% generally safe; 10%+ often struck down. Some rent-controlled cities have specific caps.",
+          "last_updated": "2026-03-22T12:19:34.723Z"
+        }
+      }
+    },
+    {
+      "name": "get_rent_increase_rules",
+      "description": "Get rent increase caps, notice periods, and rent control rules for a US state. Returns: { state, rent_control_exists, max_annual_increase, notice_required_days, exempt_properties, retaliation_protections, statute_reference, rule_summary, full_details, last_updated }",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "type": "string",
+            "default": "CA",
+            "description": "US state code e.g. 'CA', 'TX', 'NY', 'FL', 'IL'. Default: CA"
+          },
+          "city": {
+            "type": "string",
+            "description": "City name for local overrides e.g. 'Los Angeles', 'San Francisco', 'New York City'"
+          },
+          "compare_states": {
+            "type": "boolean",
+            "default": false,
+            "description": "If true, return rent increase rules for all 5 covered states for comparison"
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "comparison_mode": {
+            "type": "boolean"
+          },
+          "states": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "type": "string"
+                },
+                "rent_control_exists": {
+                  "type": "boolean"
+                },
+                "max_annual_increase": {
+                  "type": "string"
+                },
+                "notice_required_days": {
+                  "type": "number"
+                },
+                "exempt_properties": {
+                  "type": "string"
+                },
+                "statute_reference": {
+                  "type": "string"
+                },
+                "rule_summary": {
+                  "type": "string"
+                },
+                "error": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "state"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "state": {
+            "type": "string"
+          },
+          "city_override": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "rent_control_exists": {
+            "type": "boolean"
+          },
+          "max_annual_increase": {
+            "type": "string"
+          },
+          "notice_required_days": {
+            "type": "number"
+          },
+          "local_ordinance_cap": {
+            "type": "string"
+          },
+          "exempt_properties": {
+            "type": "string"
+          },
+          "just_cause_for_increase_required": {
+            "type": "boolean"
+          },
+          "banking_allowed": {
+            "type": "boolean"
+          },
+          "vacancy_decontrol": {
+            "type": "boolean"
+          },
+          "retaliation_protections": {
+            "type": "boolean"
+          },
+          "statute_reference": {
+            "type": "string"
+          },
+          "rule_summary": {
+            "type": "string"
+          },
+          "full_details": {
+            "type": "object",
+            "additionalProperties": {
+              "type": [
+                "string",
+                "number",
+                "boolean"
+              ]
+            }
+          },
+          "effective_date": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "string",
+            "enum": [
+              "statute",
+              "regulation",
+              "case_law"
+            ]
+          },
+          "notes": {
+            "type": "string"
+          },
+          "last_updated": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          },
+          "supported_states": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "_meta": {
+        "surface": "both",
+        "queryEligible": true,
+        "latencyClass": "instant",
+        "pricing": {
+          "executeUsd": "0.001"
+        },
+        "rateLimit": {
+          "maxRequestsPerMinute": 120,
+          "maxConcurrency": 10,
+          "cooldownMs": 500,
+          "notes": "Reads from local pre-built legal database. No external API calls."
+        }
+      },
+      "schemaOk": true,
+      "schemaIssues": [],
+      "smokeTestResult": {
+        "pass": true,
+        "responseTime": 17,
+        "responseContent": {
+          "state": "CA",
+          "city_override": null,
+          "rent_control_exists": true,
+          "max_annual_increase": "5% + local CPI, not to exceed 10% total",
+          "notice_required_days": 30,
+          "exempt_properties": "Buildings <15 years old, single-family homes owned by natural persons or LLCs with <3 properties (if buyer given notice), condos, duplexes where owner occupies one unit, affordable housing",
+          "retaliation_protections": true,
+          "statute_reference": "Cal. Civ. Code § 1947.12 (AB 1482)",
+          "rule_summary": "California has statewide rent control under AB 1482 (Tenant Protection Act). Annual increases capped at 5% + local CPI (max 10% total). Exemptions for buildings <15 years old and certain single-family homes. 30-day notice for <10% increase, 90-day for ≥10%.",
+          "full_details": {
+            "rent_control_exists": true,
+            "rent_control_type": "Statewide cap (AB 1482 Tenant Protection Act)",
+            "max_annual_increase": "5% + local CPI, not to exceed 10% total",
+            "notice_required_days": 30,
+            "notice_must_be_written": true,
+            "applies_to_month_to_month": true,
+            "applies_to_fixed_term": false,
+            "exempt_properties": "Buildings <15 years old, single-family homes owned by natural persons or LLCs with <3 properties (if buyer given notice), condos, duplexes where owner occupies one unit, affordable housing",
+            "retaliation_protections": true,
+            "frequency_limit": "Once per 12 months (or twice if total increase ≤10%)",
+            "special_rules": "90-day written notice required if increase is 10% or more (aggregate over 12 months). Applies to most residential tenancies after initial lease term. Local rent control ordinances may be stricter and override state law."
+          },
+          "effective_date": "2020-01-01",
+          "confidence": "statute",
+          "notes": "AB 1482 sunsets in 2030 unless extended. CPI calculation varies by region (uses CPI for All Urban Consumers). 15-year exemption is rolling (e.g., building completed 2024 is exempt until 2039). Retaliation protection in Cal. Civ. Code § 1942.5.",
+          "last_updated": "2026-03-22T12:19:34.723Z"
+        }
+      }
+    },
+    {
+      "name": "get_habitability_standards",
+      "description": "Get implied warranty of habitability requirements and tenant remedies for a US state. Returns: { state, implied_warranty_exists, repair_and_deduct_allowed, rent_withholding_allowed, repair_timeline_days, tenant_remedies, statute_reference, rule_summary, full_details, last_updated }",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "type": "string",
+            "default": "CA",
+            "description": "US state code e.g. 'CA', 'TX', 'NY', 'FL', 'IL'. Default: CA"
+          },
+          "city": {
+            "type": "string",
+            "description": "City name for local overrides e.g. 'Los Angeles', 'Chicago', 'New York City'"
+          },
+          "compare_states": {
+            "type": "boolean",
+            "default": false,
+            "description": "If true, return habitability standards for all 5 covered states for comparison"
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "comparison_mode": {
+            "type": "boolean"
+          },
+          "states": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "type": "string"
+                },
+                "implied_warranty_exists": {
+                  "type": "boolean"
+                },
+                "repair_and_deduct_allowed": {
+                  "type": "boolean"
+                },
+                "rent_withholding_allowed": {
+                  "type": "boolean"
+                },
+                "repair_timeline_days": {
+                  "type": "string"
+                },
+                "tenant_remedies": {
+                  "type": "string"
+                },
+                "statute_reference": {
+                  "type": "string"
+                },
+                "rule_summary": {
+                  "type": "string"
+                },
+                "error": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "state"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "state": {
+            "type": "string"
+          },
+          "city_override": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "implied_warranty_exists": {
+            "type": "boolean"
+          },
+          "statutory_basis": {
+            "type": "string"
+          },
+          "minimum_requirements": {
+            "type": "string"
+          },
+          "heat_required": {
+            "type": "boolean"
+          },
+          "heat_minimum_temp": {
+            "type": "string"
+          },
+          "hot_water_required": {
+            "type": "boolean"
+          },
+          "pest_control_responsibility": {
+            "type": "string"
+          },
+          "mold_disclosure_required": {
+            "type": "boolean"
+          },
+          "smoke_detector_required": {
+            "type": "boolean"
+          },
+          "carbon_monoxide_detector_required": {
+            "type": "boolean"
+          },
+          "lead_paint_compliance": {
+            "type": "string"
+          },
+          "repair_request_process": {
+            "type": "string"
+          },
+          "repair_timeline_days": {
+            "type": "string"
+          },
+          "rent_withholding_allowed": {
+            "type": "boolean"
+          },
+          "repair_and_deduct_allowed": {
+            "type": "boolean"
+          },
+          "repair_and_deduct_limit": {
+            "type": "string"
+          },
+          "code_enforcement_available": {
+            "type": "boolean"
+          },
+          "tenant_remedies": {
+            "type": "string"
+          },
+          "retaliation_protection": {
+            "type": "boolean"
+          },
+          "statute_reference": {
+            "type": "string"
+          },
+          "rule_summary": {
+            "type": "string"
+          },
+          "full_details": {
+            "type": "object",
+            "additionalProperties": {
+              "type": [
+                "string",
+                "number",
+                "boolean"
+              ]
+            }
+          },
+          "effective_date": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "string",
+            "enum": [
+              "statute",
+              "regulation",
+              "case_law"
+            ]
+          },
+          "notes": {
+            "type": "string"
+          },
+          "last_updated": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          },
+          "supported_states": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "_meta": {
+        "surface": "both",
+        "queryEligible": true,
+        "latencyClass": "instant",
+        "pricing": {
+          "executeUsd": "0.001"
+        },
+        "rateLimit": {
+          "maxRequestsPerMinute": 120,
+          "maxConcurrency": 10,
+          "cooldownMs": 500,
+          "notes": "Reads from local pre-built legal database. No external API calls."
+        }
+      },
+      "schemaOk": true,
+      "schemaIssues": [],
+      "smokeTestResult": {
+        "pass": true,
+        "responseTime": 17,
+        "responseContent": {
+          "state": "CA",
+          "city_override": null,
+          "implied_warranty_exists": true,
+          "statutory_basis": "Cal. Civ. Code §§ 1941-1942.5",
+          "minimum_requirements": "Effective waterproofing and weather protection; plumbing/gas facilities in good working order; hot/cold running water; heating facilities; electrical lighting; clean/sanitary building, grounds, and appurtenances; adequate trash receptacles; floors, stairways, railings in good repair; deadbolt locks on exterior doors; working smoke detectors; natural light in every room",
+          "heat_required": true,
+          "heat_minimum_temp": "No specific temperature in statute, but must be adequate heating facilities",
+          "hot_water_required": true,
+          "pest_control_responsibility": "Landlord responsible for pest control unless infestation caused by tenant's lack of cleanliness",
+          "mold_disclosure_required": false,
+          "smoke_detector_required": true,
+          "carbon_monoxide_detector_required": true,
+          "lead_paint_compliance": "Federal disclosure required for pre-1978 housing. CA additional requirements for lead hazard inspection/disclosure in certain circumstances.",
+          "repair_request_process": "Tenant should give written notice to landlord or property manager describing the issue. Certified mail recommended for documentation.",
+          "repair_timeline_days": "Reasonable time (typically 30 days for non-urgent, 24-72 hours for urgent like no heat/water)",
+          "rent_withholding_allowed": true,
+          "repair_and_deduct_allowed": true,
+          "repair_and_deduct_limit": "Up to 1 month's rent, maximum twice per 12-month period. Repair must not exceed 1 month's rent. 30-day notice to landlord required first.",
+          "code_enforcement_available": true,
+          "tenant_remedies": "Repair and deduct, rent withholding (pay into escrow), sue for damages, report to code enforcement, terminate lease after proper notice, sue for injunctive relief. Green v. Superior Court allows rent reduction commensurate with diminished value.",
+          "retaliation_protection": true,
+          "statute_reference": "Cal. Civ. Code §§ 1941-1942.5; Green v. Superior Court (1974) 10 Cal.3d 616",
+          "rule_summary": "California has strong habitability protections under the implied warranty of habitability. Landlords must provide weatherproof structures, working utilities, clean/sanitary conditions. Tenants can repair and deduct (up to 1 month's rent) or withhold rent for serious violations.",
+          "full_details": {
+            "implied_warranty_exists": true,
+            "statutory_basis": "Cal. Civ. Code §§ 1941-1942.5",
+            "minimum_requirements": "Effective waterproofing and weather protection; plumbing/gas facilities in good working order; hot/cold running water; heating facilities; electrical lighting; clean/sanitary building, grounds, and appurtenances; adequate trash receptacles; floors, stairways, railings in good repair; deadbolt locks on exterior doors; working smoke detectors; natural light in every room",
+            "heat_required": true,
+            "heat_minimum_temp": "No specific temperature in statute, but must be adequate heating facilities",
+            "hot_water_required": true,
+            "pest_control_responsibility": "Landlord responsible for pest control unless infestation caused by tenant's lack of cleanliness",
+            "mold_disclosure_required": false,
+            "smoke_detector_required": true,
+            "carbon_monoxide_detector_required": true,
+            "lead_paint_compliance": "Federal disclosure required for pre-1978 housing. CA additional requirements for lead hazard inspection/disclosure in certain circumstances.",
+            "repair_request_process": "Tenant should give written notice to landlord or property manager describing the issue. Certified mail recommended for documentation.",
+            "repair_timeline_days": "Reasonable time (typically 30 days for non-urgent, 24-72 hours for urgent like no heat/water)",
+            "rent_withholding_allowed": true,
+            "repair_and_deduct_allowed": true,
+            "repair_and_deduct_limit": "Up to 1 month's rent, maximum twice per 12-month period. Repair must not exceed 1 month's rent. 30-day notice to landlord required first.",
+            "code_enforcement_available": true,
+            "tenant_remedies": "Repair and deduct, rent withholding (pay into escrow), sue for damages, report to code enforcement, terminate lease after proper notice, sue for injunctive relief. Green v. Superior Court allows rent reduction commensurate with diminished value.",
+            "retaliation_protection": true
+          },
+          "effective_date": "1974-01-01",
+          "confidence": "statute",
+          "notes": "Cal. Civ. Code § 1942.5 prohibits retaliation within 180 days of tenant complaint. Green case established rent reduction remedy. Local building codes may impose stricter requirements. CO detectors required in units with fossil fuel appliances or attached garages.",
+          "last_updated": "2026-03-22T12:19:34.723Z"
+        }
+      }
+    },
+    {
+      "name": "get_lease_termination_rules",
+      "description": "Get lease termination rules including early termination, abandonment, military/DV protections for a US state. Returns: { state, landlord_duty_to_mitigate, military_termination_right, domestic_violence_termination, month_to_month_notice_days, abandonment_timeline_days, statute_reference, rule_summary, full_details, last_updated }",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "type": "string",
+            "default": "CA",
+            "description": "US state code e.g. 'CA', 'TX', 'NY', 'FL', 'IL'. Default: CA"
+          },
+          "city": {
+            "type": "string",
+            "description": "City name for local overrides e.g. 'Los Angeles', 'Chicago', 'New York City'"
+          },
+          "compare_states": {
+            "type": "boolean",
+            "default": false,
+            "description": "If true, return lease termination rules for all 5 covered states for comparison"
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "comparison_mode": {
+            "type": "boolean"
+          },
+          "states": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "type": "string"
+                },
+                "landlord_duty_to_mitigate": {
+                  "type": "boolean"
+                },
+                "military_termination_right": {
+                  "type": "boolean"
+                },
+                "domestic_violence_termination": {
+                  "type": "boolean"
+                },
+                "month_to_month_tenant_notice_days": {
+                  "type": "number"
+                },
+                "month_to_month_landlord_notice_days": {
+                  "type": "number"
+                },
+                "abandonment_timeline_days": {
+                  "type": "number"
+                },
+                "statute_reference": {
+                  "type": "string"
+                },
+                "rule_summary": {
+                  "type": "string"
+                },
+                "error": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "state"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "state": {
+            "type": "string"
+          },
+          "city_override": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "early_termination_allowed": {
+            "type": "boolean"
+          },
+          "early_termination_penalty": {
+            "type": "string"
+          },
+          "landlord_duty_to_mitigate": {
+            "type": "boolean"
+          },
+          "military_termination_right": {
+            "type": "boolean"
+          },
+          "military_notice_days": {
+            "type": "number"
+          },
+          "domestic_violence_termination": {
+            "type": "boolean"
+          },
+          "domestic_violence_notice_days": {
+            "type": "string"
+          },
+          "domestic_violence_documentation": {
+            "type": "string"
+          },
+          "month_to_month_tenant_notice_days": {
+            "type": "number"
+          },
+          "month_to_month_landlord_notice_days": {
+            "type": "number"
+          },
+          "fixed_term_auto_renewal_rules": {
+            "type": "string"
+          },
+          "abandonment_definition": {
+            "type": "string"
+          },
+          "abandonment_timeline_days": {
+            "type": "number"
+          },
+          "abandoned_property_rules": {
+            "type": "string"
+          },
+          "subletting_default_rule": {
+            "type": "string"
+          },
+          "death_of_tenant_rules": {
+            "type": "string"
+          },
+          "statute_reference": {
+            "type": "string"
+          },
+          "rule_summary": {
+            "type": "string"
+          },
+          "full_details": {
+            "type": "object",
+            "additionalProperties": {
+              "type": [
+                "string",
+                "number",
+                "boolean"
+              ]
+            }
+          },
+          "effective_date": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "string",
+            "enum": [
+              "statute",
+              "regulation",
+              "case_law"
+            ]
+          },
+          "notes": {
+            "type": "string"
+          },
+          "last_updated": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          },
+          "supported_states": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "_meta": {
+        "surface": "both",
+        "queryEligible": true,
+        "latencyClass": "instant",
+        "pricing": {
+          "executeUsd": "0.001"
+        },
+        "rateLimit": {
+          "maxRequestsPerMinute": 120,
+          "maxConcurrency": 10,
+          "cooldownMs": 500,
+          "notes": "Reads from local pre-built legal database. No external API calls."
+        }
+      },
+      "schemaOk": true,
+      "schemaIssues": [],
+      "smokeTestResult": {
+        "pass": true,
+        "responseTime": 19,
+        "responseContent": {
+          "state": "CA",
+          "city_override": null,
+          "early_termination_allowed": false,
+          "early_termination_penalty": "Tenant liable for rent until landlord re-rents or lease expires (whichever first). Landlord must make reasonable efforts to mitigate.",
+          "landlord_duty_to_mitigate": true,
+          "military_termination_right": true,
+          "military_notice_days": 30,
+          "domestic_violence_termination": true,
+          "domestic_violence_notice_days": "14 days written notice",
+          "domestic_violence_documentation": "Copy of restraining order, police report within 180 days, written statement from victim services provider, court record, or medical professional documentation",
+          "month_to_month_tenant_notice_days": 30,
+          "month_to_month_landlord_notice_days": 30,
+          "fixed_term_auto_renewal_rules": "Auto-renewal clauses allowed but must be in bold/underlined 8-point font. Tenant can terminate on 30 days notice if clause not properly formatted.",
+          "abandonment_definition": "Tenant absent for 14+ consecutive days without notice + rent unpaid",
+          "abandonment_timeline_days": 18,
+          "abandoned_property_rules": "Landlord must send notice to tenant's last known address + forwarding address if any. After 18 days, landlord can sell (if value >$700) or dispose (if <$700). Proceeds go to costs, then rent owed, then to county if unclaimed. Cal. Civ. Code §§ 1983-1984.",
+          "subletting_default_rule": "Prohibited unless lease expressly allows. Landlord can reasonably withhold consent (case law).",
+          "death_of_tenant_rules": "Lease does not automatically terminate. Estate/next-of-kin must give 30-day notice. Security deposit returned to estate/heirs after deductions.",
+          "statute_reference": "Cal. Civ. Code §§ 1946, 1946.1, 1946.7, 1951.2, 1983-1984",
+          "rule_summary": "California landlords must mitigate damages if tenant breaks lease early. Domestic violence/sexual assault/stalking victims can terminate with 14-day written notice and documentation (Cal. Civ. Code § 1946.7). Month-to-month tenants give 30 days notice; landlords give 30 days (<1 year tenancy) or 60 days (≥1 year). Abandoned property must be stored for 18 days with notice sent to tenant (Cal. Civ. Code §§ 1983-1984). Subletting prohibited unless lease allows.",
+          "full_details": {
+            "early_termination_allowed": false,
+            "early_termination_penalty": "Tenant liable for rent until landlord re-rents or lease expires (whichever first). Landlord must make reasonable efforts to mitigate.",
+            "landlord_duty_to_mitigate": true,
+            "military_termination_right": true,
+            "military_notice_days": 30,
+            "domestic_violence_termination": true,
+            "domestic_violence_notice_days": "14 days written notice",
+            "domestic_violence_documentation": "Copy of restraining order, police report within 180 days, written statement from victim services provider, court record, or medical professional documentation",
+            "month_to_month_tenant_notice_days": 30,
+            "month_to_month_landlord_notice_days": 30,
+            "fixed_term_auto_renewal_rules": "Auto-renewal clauses allowed but must be in bold/underlined 8-point font. Tenant can terminate on 30 days notice if clause not properly formatted.",
+            "abandonment_definition": "Tenant absent for 14+ consecutive days without notice + rent unpaid",
+            "abandonment_timeline_days": 18,
+            "abandoned_property_rules": "Landlord must send notice to tenant's last known address + forwarding address if any. After 18 days, landlord can sell (if value >$700) or dispose (if <$700). Proceeds go to costs, then rent owed, then to county if unclaimed. Cal. Civ. Code §§ 1983-1984.",
+            "subletting_default_rule": "Prohibited unless lease expressly allows. Landlord can reasonably withhold consent (case law).",
+            "death_of_tenant_rules": "Lease does not automatically terminate. Estate/next-of-kin must give 30-day notice. Security deposit returned to estate/heirs after deductions."
+          },
+          "effective_date": "2010-01-01",
+          "confidence": "statute",
+          "notes": "AB 2847 (2010) created DV early termination right. Landlord duty to mitigate comes from Cal. Civ. Code § 1951.2 case law. Notice periods increased from 30 to 60 days for tenancies ≥1 year under AB 2343 (2020).",
+          "last_updated": "2026-03-22T12:19:34.723Z"
+        }
+      }
+    },
+    {
+      "name": "get_required_disclosures",
+      "description": "Get required landlord disclosures (lead paint, mold, flood, sex offenders, bed bugs) for a US state. Returns: { state, lead_paint_required, mold_disclosure_required, flood_zone_disclosure_required, bed_bug_history_required, landlord_identity_required, additional_disclosures, statute_reference, rule_summary, full_details, last_updated }",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "type": "string",
+            "default": "CA",
+            "description": "US state code e.g. 'CA', 'TX', 'NY', 'FL', 'IL'. Default: CA"
+          },
+          "city": {
+            "type": "string",
+            "description": "City name for local overrides e.g. 'Los Angeles', 'Chicago', 'New York City'"
+          },
+          "compare_states": {
+            "type": "boolean",
+            "default": false,
+            "description": "If true, return required disclosures for all 5 covered states for comparison"
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "comparison_mode": {
+            "type": "boolean"
+          },
+          "states": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "type": "string"
+                },
+                "lead_paint_required": {
+                  "type": "boolean"
+                },
+                "mold_disclosure_required": {
+                  "type": "boolean"
+                },
+                "flood_zone_disclosure_required": {
+                  "type": "boolean"
+                },
+                "bed_bug_history_required": {
+                  "type": "boolean"
+                },
+                "landlord_identity_disclosure_required": {
+                  "type": "boolean"
+                },
+                "statute_reference": {
+                  "type": "string"
+                },
+                "rule_summary": {
+                  "type": "string"
+                },
+                "error": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "state"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "state": {
+            "type": "string"
+          },
+          "city_override": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "lead_paint_required": {
+            "type": "boolean"
+          },
+          "lead_paint_statute": {
+            "type": "string"
+          },
+          "mold_disclosure_required": {
+            "type": "boolean"
+          },
+          "flood_zone_disclosure_required": {
+            "type": "boolean"
+          },
+          "sex_offender_registry_disclosure": {
+            "type": "boolean"
+          },
+          "sex_offender_disclosure_details": {
+            "type": "string"
+          },
+          "bed_bug_history_required": {
+            "type": "boolean"
+          },
+          "asbestos_disclosure_required": {
+            "type": "boolean"
+          },
+          "shared_utility_disclosure_required": {
+            "type": "boolean"
+          },
+          "move_in_checklist_required": {
+            "type": "boolean"
+          },
+          "landlord_identity_disclosure_required": {
+            "type": "boolean"
+          },
+          "known_defects_disclosure_required": {
+            "type": "boolean"
+          },
+          "demolition_plans_disclosure": {
+            "type": "boolean"
+          },
+          "death_on_premises_disclosure": {
+            "type": "boolean"
+          },
+          "smoking_policy_disclosure": {
+            "type": "boolean"
+          },
+          "military_ordnance_disclosure": {
+            "type": "boolean"
+          },
+          "additional_state_disclosures": {
+            "type": "string"
+          },
+          "statute_reference": {
+            "type": "string"
+          },
+          "rule_summary": {
+            "type": "string"
+          },
+          "full_details": {
+            "type": "object",
+            "additionalProperties": {
+              "type": [
+                "string",
+                "number",
+                "boolean"
+              ]
+            }
+          },
+          "effective_date": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "string",
+            "enum": [
+              "statute",
+              "regulation",
+              "case_law"
+            ]
+          },
+          "notes": {
+            "type": "string"
+          },
+          "last_updated": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          },
+          "supported_states": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "_meta": {
+        "surface": "both",
+        "queryEligible": true,
+        "latencyClass": "instant",
+        "pricing": {
+          "executeUsd": "0.001"
+        },
+        "rateLimit": {
+          "maxRequestsPerMinute": 120,
+          "maxConcurrency": 10,
+          "cooldownMs": 500,
+          "notes": "Reads from local pre-built legal database. No external API calls."
+        }
+      },
+      "schemaOk": true,
+      "schemaIssues": [],
+      "smokeTestResult": {
+        "pass": true,
+        "responseTime": 15,
+        "responseContent": {
+          "state": "CA",
+          "city_override": null,
+          "lead_paint_required": true,
+          "lead_paint_statute": "Federal: 42 U.S.C. § 4852d (pre-1978); CA Health & Safety Code § 17920.10",
+          "mold_disclosure_required": true,
+          "flood_zone_disclosure_required": true,
+          "sex_offender_registry_disclosure": true,
+          "sex_offender_disclosure_details": "Landlord must provide notice that Megan's Law database exists and website (meganslaw.ca.gov). No duty to check or disclose specific offenders. Cal. Civ. Code § 2079.10a.",
+          "bed_bug_history_required": true,
+          "asbestos_disclosure_required": true,
+          "shared_utility_disclosure_required": true,
+          "move_in_checklist_required": true,
+          "landlord_identity_disclosure_required": true,
+          "known_defects_disclosure_required": true,
+          "demolition_plans_disclosure": true,
+          "death_on_premises_disclosure": true,
+          "smoking_policy_disclosure": true,
+          "military_ordnance_disclosure": true,
+          "additional_state_disclosures": "Pest control company info (if used), statutory lien rights, noise standards if near airport, proximity to former military base with potential ordnance, water-conserving plumbing fixtures, sale of property notice (60-day move-out for new owner), database of eviction info, pest control inspection report, commercial cannabis cultivation prohibition. Cal. Civ. Code §§ 1940-1954.",
+          "statute_reference": "Cal. Civ. Code §§ 1710.2, 1940.2, 1940.35, 1940.6, 1940.7, 1941.1, 1946.1, 1954.605, 2079.10a; Health & Safety Code §§ 17920.3, 17920.10, 26147",
+          "rule_summary": "California has the most extensive landlord disclosure requirements in the US. Required disclosures include: federal lead paint (pre-1978 housing), mold, bed bugs (as of 2016), flood zone status, Megan's Law database notice, demolition/conversion intent, military ordnance locations near property, shared utility arrangements, smoking policy, and death on premises within 3 years (Cal. Civ. Code § 1710.2). Landlord/agent identity must be disclosed. Move-in inspection checklist required.",
+          "full_details": {
+            "lead_paint_required": true,
+            "lead_paint_statute": "Federal: 42 U.S.C. § 4852d (pre-1978); CA Health & Safety Code § 17920.10",
+            "mold_disclosure_required": true,
+            "flood_zone_disclosure_required": true,
+            "sex_offender_registry_disclosure": true,
+            "sex_offender_disclosure_details": "Landlord must provide notice that Megan's Law database exists and website (meganslaw.ca.gov). No duty to check or disclose specific offenders. Cal. Civ. Code § 2079.10a.",
+            "bed_bug_history_required": true,
+            "asbestos_disclosure_required": true,
+            "shared_utility_disclosure_required": true,
+            "move_in_checklist_required": true,
+            "landlord_identity_disclosure_required": true,
+            "known_defects_disclosure_required": true,
+            "demolition_plans_disclosure": true,
+            "death_on_premises_disclosure": true,
+            "smoking_policy_disclosure": true,
+            "military_ordnance_disclosure": true,
+            "additional_state_disclosures": "Pest control company info (if used), statutory lien rights, noise standards if near airport, proximity to former military base with potential ordnance, water-conserving plumbing fixtures, sale of property notice (60-day move-out for new owner), database of eviction info, pest control inspection report, commercial cannabis cultivation prohibition. Cal. Civ. Code §§ 1940-1954."
+          },
+          "effective_date": "2016-07-01",
+          "confidence": "statute",
+          "notes": "Bed bug disclosure added 2016 (AB 551). Death disclosure within 3 years (not just 'stigmatized property'). Mold disclosure form recommended (not strictly required). Smoking policy disclosure added 2012. Military ordnance disclosure required near former military bases (AB 1950). Cannabis cultivation disclosure added 2017.",
+          "last_updated": "2026-03-22T12:19:34.723Z"
+        }
+      }
+    }
+  ],
+  "timestamp": "2026-03-22T12:21:56.693Z"
+}
